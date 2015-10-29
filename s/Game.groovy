@@ -4,9 +4,9 @@ package s
 class Game {
     boolean D=false // debug
 
-    def stack=[] as List<Board>
+    def stack=[] as List<GameBoard>
     Game(String inp) {
-        stack << new Board( inp )
+        stack << new GameBoard( inp )
     }
 
     boolean win() { stack.last().win() }
@@ -16,7 +16,7 @@ class Game {
     // if there is only one candidate Tile for a digit
     // within any coterie, set it to that digit
     boolean inferByOnlyCandidate() {
-        Board b = stack.last().clone()
+        GameBoard b = stack.last().clone()
         boolean hasInferredSingletons = b.inferSingletons()
         if (b.lose()) {
             println "losing stack!"
@@ -29,7 +29,7 @@ class Game {
     // if there is only one possible digit for a Tile,
     // set it to that digit
     boolean inferByOnlyPossible() {
-        Board b = stack.last().clone()
+        GameBoard b = stack.last().clone()
         boolean hasSingletons
         while (b.hasSingletons()) {
             hasSingletons = true
