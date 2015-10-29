@@ -2,38 +2,15 @@
 import s.*
 
 def solve(inp) {
+    Game g=new Game(inp)
+    g.infer()
 
-    Board b
-    def game=[b = new Board().readString( inp ).findPossible()]
-    println b
+    println g.stack.join('\n')
 
-    boolean doom=true
-    while (doom) {
-        b = game.last().clone()
-        boolean hasInferredSingletons = b.inferSingletons()
-        if (b.lose()) {
-            println "losing game!"
-            break
-        }
-        if (hasInferredSingletons) { game.add(b); println b }
+    if (g.win()) println "Game WON!"
+    else if (g.full()) println "Board full, but game not won."
+    else println "Board is not full."
 
-        boolean hasSingletons
-        while (b.hasSingletons()) {
-            hasSingletons = true
-            b = game.last().clone()
-            b.setAllSingletons()
-            game.add(b); println b
-            if (b.lose()) {
-                println "losing game!"
-                break
-            }
-        }
-
-        if (!(hasInferredSingletons || hasSingletons) ) doom=false
-    }
-
-    if (b.win()) println "Game WON!"
-    //println game.join('\n')
     println '- '*45
 }
 

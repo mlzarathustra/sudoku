@@ -16,7 +16,7 @@ def lose='''
 ... ... ...
 '''
 
-Board b=new Board().readString(lose).findPossible()
+Board b=new Board(lose)
 
 println "b.lose: ${b.lose()}"
 println b

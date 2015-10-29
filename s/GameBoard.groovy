@@ -1,9 +1,9 @@
 package s
 
 class GameBoard extends Board {
-    GameBoard() { super() }
+    GameBoard(String inp) { super(inp) }
 
-    def clone() { }
+    def clone() { new GameBoard().copyFrom(this)}
 
 
 }

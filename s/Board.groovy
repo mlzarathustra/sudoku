@@ -42,6 +42,7 @@ class Board implements Cloneable {
         [*0..8].each { mkRow(it); mkCol(it) }
         [*0..2].each { rowNum -> [*0..2].each { colNum -> mkBox(rowNum, colNum) } }
     }
+    Board( String inp ) { this(); readString(inp) }
 
     Board readString( inp ) {
         def lines=inp.split(/\n/).findAll{it}
@@ -56,6 +57,7 @@ class Board implements Cloneable {
                 } catch (ex) {}
             }
         }
+        findPossible()
         this
     }
     Board findPossible() {
@@ -95,7 +97,18 @@ class Board implements Cloneable {
         }.join()
     }
 
-    def clone() {
+    Board copyFrom(Board other) {
+        other.board.eachWithIndex { row,rowNum ->
+            row.eachWithIndex { Tile tile,int colNum ->
+                board[rowNum][colNum].copy(tile)
+            }
+        }
+        this
+    }
+
+    def clone() { new Board().copyFrom(this) }
+/*
+    def clone_v1() {
         def newBie=new Board()
 
         board.eachWithIndex { row,rowNum ->
@@ -105,7 +118,7 @@ class Board implements Cloneable {
         }
         newBie
     }
-
+*/
     boolean proper(list) {  // List<Tile>
         if (list.size() != 9) return false
         boolean[] here=new boolean[9]
@@ -115,15 +128,19 @@ class Board implements Cloneable {
 
     boolean allProper() { allCoteries.every { proper(it) } }
 
-    boolean win() {
+    boolean full() {
         // all populated
         for (int i=0; i<board.length; ++i) {
             for (int j=0; j<board[i].size(); ++j) {
                 if (board[i][j].value == null) return false
             }
         }
-        return allProper()
+        true
     }
+    boolean win() {
+        return full() && allProper()
+    }
+
     // if any tile has no possible values, the game cannot proceed
     boolean lose() {
         for (int i=0; i<board.length; ++i) {
@@ -148,7 +165,7 @@ class Board implements Cloneable {
     // if a given possiblity only appears in one tile of the coterie,
     // that tile must be set to that value.
     boolean inferSingletons() {
-        boolean D=true // debug
+        boolean D=false // debug
         boolean rval=false
         allCoteries.each { coterie ->
             def matchingTiles=[]  // matchingTiles = List<Tile>

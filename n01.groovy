@@ -1,9 +1,10 @@
 import s.*
 
+print "input board, and find possible values"
 
 def solve(inp) {
     println inp
-    println new Board().readString( inp ).findPossible()
+    println new Board( inp )
 }
 
 [

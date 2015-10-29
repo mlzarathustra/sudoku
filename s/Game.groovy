@@ -2,11 +2,19 @@ package s
 
 
 class Game {
-    def stack=[]
+    boolean D=false // debug
+
+    def stack=[] as List<Board>
     Game(String inp) {
-        stack << new Board().readString( inp ).findPossible()
+        stack << new Board( inp )
     }
 
+    boolean win() { stack.last().win() }
+    boolean lose() { stack.last().lose() }
+    boolean full() { stack.last().full() }
+
+    // if there is only one candidate Tile for a digit
+    // within any coterie, set it to that digit
     boolean inferByOnlyCandidate() {
         Board b = stack.last().clone()
         boolean hasInferredSingletons = b.inferSingletons()
@@ -14,9 +22,12 @@ class Game {
             println "losing stack!"
             return hasInferredSingletons
         }
-        if (hasInferredSingletons) { stack.add(b); println b }
+        if (hasInferredSingletons) { stack.add(b); if (D) println b }
         hasInferredSingletons
     }
+
+    // if there is only one possible digit for a Tile,
+    // set it to that digit
     boolean inferByOnlyPossible() {
         Board b = stack.last().clone()
         boolean hasSingletons
@@ -24,27 +35,28 @@ class Game {
             hasSingletons = true
             b = stack.last().clone()
             b.setAllSingletons()
-            stack.add(b); println b
+            stack.add(b); if (D) println b
             if (b.lose()) {
                 println "losing game!"
                 break
             }
         }
+        hasSingletons
     }
 
     void infer() {
-        boolean doom=true
+        boolean doom=true  // groovy doesn't offer do/while
         while (doom) {
-
             def hasInferredSingletons = inferByOnlyCandidate()
-
             def hasSingletons = inferByOnlyPossible()
-
-
             if (!(hasInferredSingletons || hasSingletons) ) doom=false
         }
     }
-    boolean win() { stack.last().win() }
+
+    boolean guess() {
+
+    }
+
     
     
 }

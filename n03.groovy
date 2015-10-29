@@ -1,5 +1,7 @@
 import s.*
 
+println "a series of hard-coded adjustments"
+
 def solve(inp) {
 
     // row,col (origin 0), value
@@ -8,10 +10,12 @@ def solve(inp) {
     ]
 
     println inp
-    def game = [new Board().readString( inp ).findPossible()]
+    def game = [new Board( inp )]
 
     adjust.each { a->
         Board b=game.last().clone()
+        def (r,c,v)=a
+        println "setValue($r,$c,$v)"
         b.setValue(*a)
         game.add(b)
     }

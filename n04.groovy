@@ -1,7 +1,8 @@
 import s.*
 
 def solve(inp) {
-    def b=new Board().readString( inp ).findPossible()
+    def b=new Board( inp )
+    println( b.full()?'Full':'Has empty tile(s).')
     if (b.win()) println "WIN!"
     else println "not a win."
     println b
