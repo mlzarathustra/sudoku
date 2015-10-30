@@ -3,6 +3,7 @@ package s
 
 class Game {
     boolean D=false // debug
+    boolean cloneInferences=false
 
     def stack=[] as List<Board>
     Game(String inp) { stack << new Board( inp ) }
@@ -16,30 +17,33 @@ class Game {
     // if there is only one candidate Tile for a digit
     // within any coterie, set it to that digit
     boolean inferByOnlyCandidate() {
-        Board b = stack.last().clone()
+        Board b = (cloneInferences) ? stack.last().clone() : stack.last()
         boolean hasInferredSingletons = b.inferSingletons()
         if (b.lose()) {
             println "losing stack!"
             return hasInferredSingletons
         }
-        if (hasInferredSingletons) { stack.add(b); if (D) println b }
+        if (hasInferredSingletons) {
+            if (cloneInferences) stack.add(b);
+            if (D) println b
+        }
         hasInferredSingletons
     }
 
     // if there is only one possible digit for a Tile,
     // set it to that digit
     boolean inferByOnlyPossible() {
-        Board b = stack.last().clone()
+        Board b = (cloneInferences) ? stack.last().clone() : stack.last()
         boolean hasSingletons
         while (b.hasSingletons()) {
             hasSingletons = true
-            b = stack.last().clone()
+            if (cloneInferences) b = stack.last().clone()
             b.setAllSingletons()
-            stack.add(b); if (D) println b
-            if (b.lose()) {
-                println "losing game!"
-                break
-            }
+
+            if (cloneInferences) stack.add(b);
+            if (D) println b
+
+            if (b.lose()) { println "losing game!"; break }
         }
         hasSingletons
     }
@@ -92,6 +96,7 @@ class Game {
 
 
     void solve() {
+        stack.add(stack.last().clone())
         boolean doom=true
         while (doom) {
             infer()

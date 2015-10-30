@@ -3,6 +3,7 @@ import s.*
 
 def solve(inp) {
     Game g=new Game(inp)
+    //g.cloneInferences = true // shows the whole play
     g.solve()
 
     g.showStack()
