@@ -5,8 +5,8 @@ def solve(inp) {
     Game g=new Game(inp)
     g.solve()
 
+    g.showStack()
 
-    println g.stack.join('\n'+'  .'*30+'\n')
     if (g.win()) println "Game WON!"
 
     println '- '*45

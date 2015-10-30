@@ -5,10 +5,11 @@ def solve(inp) {
     Game g=new Game(inp)
     g.solve()
 
-    println g.stack.join('\n'+'  .'*30+'\n')
+    g.showStack()
 
     if (g.win()) println "Game WON!"
-    else if (g.full()) println "Board full, but game not won."
+    else if (g.full())
+        println "Board full, but game not won."
     else println "Board is not full."
 
     println '- '*45

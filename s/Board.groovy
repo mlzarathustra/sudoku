@@ -107,18 +107,7 @@ class Board implements Cloneable {
     }
 
     def clone() { new Board().copyFrom(this) }
-/*
-    def clone_v1() {
-        def newBie=new Board()
 
-        board.eachWithIndex { row,rowNum ->
-            row.eachWithIndex { Tile tile,int colNum ->
-                newBie.board[rowNum][colNum].copy(tile)
-            }
-        }
-        newBie
-    }
-*/
     boolean proper(list) {  // List<Tile>
         if (list.size() != 9) return false
         boolean[] here=new boolean[9]

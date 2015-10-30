@@ -12,29 +12,21 @@ class Tile {
         "s.Tile[$row,$col] { value=$value ok=$ok }"
     }
 
-    Tile() {
-        value = null
-        ok=[]
-    }
-    Tile(r,c) {
-        this(); row=r; col=c
-    }
+    Tile() { value = null; ok=[] }
+
+    Tile(r,c) { this(); row=r; col=c }
 
     def okStr() { ok.collect{ ''+it }.join() }
 
     Tile copy(Tile t) {
         value=t.value
-        ok.addAll(t.ok)
         row=t.row;col=t.col
+        ok.addAll(t.ok)
         // coteries are set by Board c'tor -- don't touch
         this
     }
 
-    void setIfSingle() {
-        if (ok.size() == 1) value=ok[0]
-    }
-    boolean isSingle() {
-        value == null && ok.size()==1
-    }
+    void setIfSingle() { if (ok.size() == 1) value=ok[0] }
+    boolean isSingle() { value == null && ok.size()==1 }
 
 }

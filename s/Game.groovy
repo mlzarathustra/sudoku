@@ -5,9 +5,9 @@ class Game {
     boolean D=false // debug
 
     def stack=[] as List<Board>
-    Game(String inp) {
-        stack << new Board( inp )
-    }
+    Game(String inp) { stack << new Board( inp ) }
+
+    void showStack() { println stack.join('\n'+'  .'*30+'\n') }
 
     boolean win() { stack.last().win() }
     boolean lose() { stack.last().lose() }
@@ -54,28 +54,39 @@ class Game {
     }
 
     boolean guess() {
-        Board b=stack.last()
-        Tile t=b.findSmallestVariant()
-
-        println "smallest variant is $t"
-
-
-
-
-        int sf = stack.size() // stack frame - cut back to here
-
-        //stack.add(b=b.clone())
-
-
-
-
-
-
-
-
 
         println "GUESS!"
 
+        Board b=stack.last()
+        Tile t=b.findSmallestVariant()
+        println "smallest variant is $t"
+
+        def ok=[]
+        ok.addAll(t.ok)
+
+        int sf = stack.size() // stack frame - cut back to here
+        ok.find { value->
+            println "trying value $value"
+            stack.add(b=b.clone())
+
+            b.setValue(t.row,t.col,value)
+
+            infer()
+            println "//\n"*9
+            //showStack()
+            if (win()) {
+                println "WIN!!"
+                return true
+            }
+
+            //  else guess
+
+
+
+            stack=stack.subList(0,sf)
+            false // continue
+        }
+        win()
     }
 
 
@@ -84,8 +95,13 @@ class Game {
         boolean doom=true
         while (doom) {
             infer()
-            if (!win() && !lose() && !full()) guess()
+            if (!win() && !lose() && !full()) {
 
+                if (guess()) return // win
+
+                if (full() || lose()) return // caller will check for win or lose
+
+            }
             // terminating condition for 'evil?'
             //
             doom=false
