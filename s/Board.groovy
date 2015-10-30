@@ -68,7 +68,6 @@ class Board implements Cloneable {
                 //println f.ok
                 f.coteries.each { cot->
                     cot.each { if (it.value) f.ok -= it.value }
-
                 }
             }
             //println ''
@@ -88,7 +87,14 @@ class Board implements Cloneable {
                 //" ${col.value?:'.'}:${col.okStr()} ")
             }+'\n').join()
         }.join()
+    }
 
+    String forReadString() {
+        board.collect { row->
+            row.collect { Tile t->
+                (t.value==null) ? '.' : (t.value as String)
+            }.join()+'\n'
+        }.join()
     }
 
     String simpleToString() {
@@ -180,11 +186,22 @@ class Board implements Cloneable {
     }
     Tile findSmallestVariant() {
         findPossible()
+        if (win()) println "WIN!"
+        if (lose()) return null
+        if (full()) {
+            println "Shouldn't get to here!!"
+            println "findSmallestVariant null - lose=${lose()} full=${full()}"
+            println forReadString()
+            return null
+        } // no guesses will win
+
         def ironed=board.flatten()
         def min = ironed.findAll { Tile t-> t.value == null }
                 .collect { Tile t-> t.ok.size() }.min()
         //println "smallest variant size ... $min"
-        new Tile().copy((Tile) ironed.find { t-> t.ok.size() == min} )
+        new Tile().copy(ironed.find { t->
+            t.ok.size() == min && t.value == null
+        } )
     }
 
 }
