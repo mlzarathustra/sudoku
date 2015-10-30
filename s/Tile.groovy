@@ -22,10 +22,12 @@ class Tile {
 
     def okStr() { ok.collect{ ''+it }.join() }
 
-    void copy(Tile t) {
+    Tile copy(Tile t) {
         value=t.value
         ok.addAll(t.ok)
+        row=t.row;col=t.col
         // coteries are set by Board c'tor -- don't touch
+        this
     }
 
     void setIfSingle() {

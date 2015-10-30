@@ -3,9 +3,9 @@ import s.*
 
 def solve(inp) {
     Game g=new Game(inp)
-    g.infer()
+    g.solve()
 
-    println g.stack.join('\n')
+    println g.stack.join('\n'+'  .'*30+'\n')
 
     if (g.win()) println "Game WON!"
     else if (g.full()) println "Board full, but game not won."
@@ -26,8 +26,8 @@ def solve(inp) {
 
 ..3 2.. ..6
 2.. ..8 ..3
-... ..4 ..5'''
-,'''
+... ..4 ..5''',
+'''
 7.. ..9 .5.
 ..8 ... ..6
 ... 31. 4..

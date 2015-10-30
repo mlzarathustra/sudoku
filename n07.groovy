@@ -3,7 +3,7 @@ import s.*
 
 def solve(inp) {
     Game g=new Game(inp)
-    g.infer()
+    g.solve()
 
 
     println g.stack.join('\n'+'  .'*30+'\n')

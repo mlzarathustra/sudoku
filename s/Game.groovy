@@ -4,9 +4,9 @@ package s
 class Game {
     boolean D=false // debug
 
-    def stack=[] as List<GameBoard>
+    def stack=[] as List<Board>
     Game(String inp) {
-        stack << new GameBoard( inp )
+        stack << new Board( inp )
     }
 
     boolean win() { stack.last().win() }
@@ -16,7 +16,7 @@ class Game {
     // if there is only one candidate Tile for a digit
     // within any coterie, set it to that digit
     boolean inferByOnlyCandidate() {
-        GameBoard b = stack.last().clone()
+        Board b = stack.last().clone()
         boolean hasInferredSingletons = b.inferSingletons()
         if (b.lose()) {
             println "losing stack!"
@@ -29,7 +29,7 @@ class Game {
     // if there is only one possible digit for a Tile,
     // set it to that digit
     boolean inferByOnlyPossible() {
-        GameBoard b = stack.last().clone()
+        Board b = stack.last().clone()
         boolean hasSingletons
         while (b.hasSingletons()) {
             hasSingletons = true
@@ -54,7 +54,42 @@ class Game {
     }
 
     boolean guess() {
+        Board b=stack.last()
+        Tile t=b.findSmallestVariant()
 
+        println "smallest variant is $t"
+
+
+
+
+        int sf = stack.size() // stack frame - cut back to here
+
+        //stack.add(b=b.clone())
+
+
+
+
+
+
+
+
+
+        println "GUESS!"
+
+    }
+
+
+
+    void solve() {
+        boolean doom=true
+        while (doom) {
+            infer()
+            if (!win() && !lose() && !full()) guess()
+
+            // terminating condition for 'evil?'
+            //
+            doom=false
+        }
     }
 
     
