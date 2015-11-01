@@ -3,14 +3,11 @@ package s
 class Tile {
     Integer value
     List<Integer> ok
-    // [0]=row [1]=col [2]=box
-    def coteries = [[],[],[]]
     int row,col
+    def coteries = [[],[],[]] // [0]=row [1]=col [2]=box
 
     // trying to display coteries will give a stack overflow.
-    String toString() {
-        "s.Tile[$row,$col] { value=$value ok=$ok }"
-    }
+    String toString() { "s.Tile[$row,$col] { value=$value ok=$ok }" }
 
     Tile() { value = null; ok=[] }
 

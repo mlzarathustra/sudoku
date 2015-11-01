@@ -199,9 +199,10 @@ class Board implements Cloneable {
         def min = ironed.findAll { Tile t-> t.value == null }
                 .collect { Tile t-> t.ok.size() }.min()
         //println "smallest variant size ... $min"
-        new Tile().copy(ironed.find { t->
-            t.ok.size() == min && t.value == null
-        } )
+        new Tile().copy((Tile)(
+                ironed.find { t->
+                    t.ok.size() == min && t.value == null
+        }) )
     }
 
 }

@@ -115,7 +115,11 @@ class Game {
                 println "WIN!!"
                 return true
             }
-            else if (guess()) return true
+            else if (full()) {
+                println "Illegal board state"
+                return false
+            }
+            if (guess()) return true
 
             // else cut back stack and on to the next possibility
             stack=stack.subList(0,sf)
