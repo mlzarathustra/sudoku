@@ -4,6 +4,7 @@ package s
 class Game {
     static boolean D=false // debug
     static boolean D2=false // show function entries
+    static boolean D3=false
     boolean cloneInferences=false
 
     def stack=[] as List<Board>
@@ -91,10 +92,10 @@ class Game {
     static Board guess(Board b) {
         if (b.win()) return b
         b=b.clone()
-        println "GUESS!"
+        if (D3) println "GUESS!"
 
         Tile t=b.findSmallestVariant()
-        println "smallest variant is $t"
+        if (D3) println "smallest variant is $t"
         if (!t) return null // no guesses to make
 
         def ok=[]
@@ -103,8 +104,8 @@ class Game {
         for (int i=0; i<ok.size(); ++i) {
             b.board[t.row][t.col].value = ok[i]
             b.findPossible()
-            println "Guessing: [$t.row,$t.col]=${ok[i]}"
-            println(''+ b + '- '*40)
+            if (D3) println "Guessing: [$t.row,$t.col]=${ok[i]}"
+            if (D3) println(''+ b + '- '*40)
             Board r=guess(b)
             if (r != null) return r
         }
@@ -125,16 +126,19 @@ class Game {
 
     static def solve(String inp) {
 
-        Board b=solve(new Board(inp))
+        Board puzzle = new Board(inp)
+        println puzzle.forReadString()
 
-        if (b) {
+        Board win=solve(puzzle)
 
-            if (b.win()) println "Game WON!"
-            else if (b.full())
+        if (win) {
+
+            if (win.win()) println "Game WON!"
+            else if (win.full())
                 println "Board full, but game not won."
             else println "Board is not full."
 
-            println b.forReadString()
+            println win.forReadString()
 
         }
         else println "Game lost."

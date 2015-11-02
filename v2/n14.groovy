@@ -1,8 +1,8 @@
-println "another failure"
+println "the first version failed to solve this one"
 
 // http://fr.websudoku.com/?level=4&set_id=3112941144
 
-s.Game.guess('''
+s.Game.solve('''
 ..6 ... ..7
 ... .7. 45.
 .4. 1.6 ...

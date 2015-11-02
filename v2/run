@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for f in n*.groovy; do 
+  echo $f
+  g $f
+  echo '[Press Enter to continue...]
+  read a
+done
+

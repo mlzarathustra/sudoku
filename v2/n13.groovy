@@ -1,5 +1,4 @@
 
-println "this one seems insolvable"
 
 // the commented out one from n08
 s.Game.solve(

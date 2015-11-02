@@ -1,5 +1,4 @@
 
-println "Does this failure prove the puzzle unsolvable?"
 
 // the end result from n08, the 1st puzzle
 s.Game.solve('''
