@@ -114,14 +114,23 @@ class Board implements Cloneable {
 
     def clone() { new Board().copyFrom(this) }
 
-    boolean proper(list) {  // List<Tile>
+    static boolean proper(list) {  // List<Tile>
         if (list.size() != 9) return false
         boolean[] here=new boolean[9]
         list.each { try { here[it.value-1] = true } catch (ex) {} }
         here.every()
     }
+    static boolean hasDups(list) {
+        def has=[] as HashSet
+        list.any {
+            if (it.value != null && has.contains(it.value)) return true
+            has << it.value
+        }
+        false
+    }
 
     boolean allProper() { allCoteries.every { proper(it) } }
+    boolean improper() { allCoteries.any { hasDups(it) }}
 
     boolean full() {
         // all populated
@@ -186,7 +195,10 @@ class Board implements Cloneable {
     }
     Tile findSmallestVariant() {
         findPossible()
-        if (win()) println "WIN!"
+        if (win()) {
+            println "WIN!"
+            return null
+        }
         if (lose()) return null
         if (full()) {
             println "Shouldn't get to here!!"

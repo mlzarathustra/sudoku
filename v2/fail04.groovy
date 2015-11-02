@@ -2,7 +2,7 @@ println "another failure"
 
 // http://fr.websudoku.com/?level=4&set_id=3112941144
 
-s.Game.solve('''
+s.Game.guess('''
 ..6 ... ..7
 ... .7. 45.
 .4. 1.6 ...

@@ -68,7 +68,11 @@ class Game {
             if (cloneInferences) stack.add(b);
             if (D) println b
 
-            if (b.lose()) { println "losing game!"; break }
+            if (b.lose() || b.improper()) {
+                println "losing game:"
+                println b
+                return false
+            }
         }
         hasSingletons
     }
@@ -82,83 +86,58 @@ class Game {
         }
     }
 
-    boolean guess() {
-
+    // return: winning board, or null
+    //
+    static Board guess(Board b) {
+        if (b.win()) return b
+        b=b.clone()
         println "GUESS!"
-
-        Board b=stack.last()
 
         Tile t=b.findSmallestVariant()
         println "smallest variant is $t"
-        if (!t) return false // no guesses to make
+        if (!t) return null // no guesses to make
 
         def ok=[]
         ok.addAll(t.ok)
 
-        int sf = stack.size() // stack frame - cut back to here
-        ok.find { value->
-            println "trying value $value"
-
-            b=b.clone()
-            if (b.board[t.row][t.col].value == value) {
-                println "panic!"
-                System.exit(-1)
-            }
-            b.setValue(t.row,t.col,value)
-            stack.add(b)
-
-            infer()
-            //println "//\n"*9
-            if (D2) showStackForReadString()
-
-            if (win()) {
-                println "WIN!!"
-                return true
-            }
-            else if (full()) {
-                println "Illegal board state"
-                return false
-            }
-            if (guess()) return true
-
-            // else cut back stack and on to the next possibility
-            stack=stack.subList(0,sf)
-            false // continue
+        for (int i=0; i<ok.size(); ++i) {
+            b.board[t.row][t.col].value = ok[i]
+            b.findPossible()
+            println "Guessing: [$t.row,$t.col]=${ok[i]}"
+            println(''+ b + '- '*40)
+            Board r=guess(b)
+            if (r != null) return r
         }
-        win()
+        return null
     }
 
-    void solve() {
-        stack.add(stack.last().clone())
-        boolean doom=true
-        while (doom) {
-            infer()
-            if (!win() && !lose() && !full()) {
-
-                if (guess()) return // win
-
-                if (full() || lose()) return // caller will check for win or lose
-
-            }
-            // terminating condition for 'evil?'
-            //
-            doom=false
-        }
+    static guess(String inp) {
+        Board b=guess(new Board(inp))
+        if (b==null) println "no solution found."
+        else println "WIN!! \n\n$b"
     }
 
+
+    static Board solve(Board b) {
+                       // todo - try inferences here
+        guess(b)
+    }
 
     static def solve(String inp) {
-        Game g=new Game(inp)
-        g.solve()
 
-        g.showStack()
+        Board b=solve(new Board(inp))
 
-        if (g.win()) println "Game WON!"
-        else if (g.full())
-            println "Board full, but game not won."
-        else println "Board is not full."
+        if (b) {
 
-        if (D2) println g.stack.last().forReadString()
+            if (b.win()) println "Game WON!"
+            else if (b.full())
+                println "Board full, but game not won."
+            else println "Board is not full."
+
+            println b.forReadString()
+
+        }
+        else println "Game lost."
         println '- '*45
     }
     
