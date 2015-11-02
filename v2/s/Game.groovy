@@ -56,28 +56,19 @@ class Game {
     }
 
     // if there is only one possible digit for a Tile,
-    // set it to that digit
-    boolean inferByOnlyPossible() {
+    // set it to that digit. This can leave the board
+    // in an improper state (i.e with an illegal duplicate)
+    // it is also sometimes enough to cause a win
+    static void inferByOnlyPossible(Board b) {
         if (D2) println "inferByOnlyPossible"
-        Board b=lastBoard()
-        boolean hasSingletons
+        // shouldn't need to clone - no need for multiple copies
+
         while (b.hasSingletons()) {
-            hasSingletons = true
-            if (cloneInferences) b = stack.last().clone()
             b.setAllSingletons()
-
-            if (cloneInferences) stack.add(b);
             if (D) println b
-
-            if (b.lose() || b.improper()) {
-                println "losing game:"
-                println b
-                return false
-            }
         }
-        hasSingletons
     }
-
+/*
     void infer() {
         boolean doom=true  // groovy doesn't offer do/while
         while (doom) {
@@ -86,13 +77,17 @@ class Game {
             if (!(hasInferredSingletons || hasSingletons) ) doom=false
         }
     }
-
+*/
     // return: winning board, or null
     //
     static Board guess(Board b) {
         if (b.win()) return b
         b=b.clone()
         if (D3) println "GUESS!"
+
+        inferByOnlyPossible(b)
+        if (b.win()) return b
+        if (b.lose() || b.improper()) return null
 
         Tile t=b.findSmallestVariant()
         if (D3) println "smallest variant is $t"
@@ -111,37 +106,36 @@ class Game {
         }
         return null
     }
-
-    static guess(String inp) {
-        Board b=guess(new Board(inp))
-        if (b==null) println "no solution found."
-        else println "WIN!! \n\n$b"
+/*
+    static Board guess(String inp) {
+        Board win=guess(new Board(inp))
+        if (win==null) println "no solution found."
+        else println "WIN!! \n\n$win"
+        return win
     }
-
-
+*/
+/*
     static Board solve(Board b) {
-                       // todo - try inferences here
         guess(b)
     }
+*/
 
     static def solve(String inp) {
-
         Board puzzle = new Board(inp)
         println puzzle.forReadString()
 
-        Board win=solve(puzzle)
+        Board win=guess(puzzle)
 
         if (win) {
-
             if (win.win()) println "Game WON!"
             else if (win.full())
                 println "Board full, but game not won."
             else println "Board is not full."
 
             println win.forReadString()
-
         }
         else println "Game lost."
+
         println '- '*45
     }
     

@@ -1,8 +1,8 @@
+import s.Game
 
-
-def solve(inp) {
+def solve(String inp) {
     //g.cloneInferences = true // shows the whole play
-    s.Game.solve(inp)
+    Game.solve(inp)
 
     println '- '*45
 }

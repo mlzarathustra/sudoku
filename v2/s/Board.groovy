@@ -6,11 +6,13 @@ class Board implements Cloneable {
 
     void mkRow( rowNum ) {
         def row=board[rowNum]
-        row.each { it.coteries[0]=row; allCoteries << row }
+        row.each { it.coteries[0]=row }
+        allCoteries << row
     }
     void mkCol( colNum ) {
         def col=board.collect { it[colNum] }
-        col.each { it.coteries[1]=col; allCoteries << col }
+        col.each { it.coteries[1]=col }
+        allCoteries << col
     }
     void mkBox( rowNum, colNum ) {
         boolean D=false // debug
@@ -28,7 +30,8 @@ class Board implements Cloneable {
             }
             if (D) println ''
         }
-        box.each { it.coteries[2]=box; allCoteries << box}
+        box.each { it.coteries[2]=box }
+        allCoteries << box
     }
 
     Board() {
@@ -121,11 +124,14 @@ class Board implements Cloneable {
         here.every()
     }
     static boolean hasDups(list) {
+        //println "hasDups($list)"
         def has=[] as HashSet
-        list.any {
+        if (list.any {
             if (it.value != null && has.contains(it.value)) return true
             has << it.value
+            false
         }
+        ) return true
         false
     }
 
